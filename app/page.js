@@ -1571,8 +1571,12 @@ export default function Home() {
     window.scrollTo({top:0, behavior:'smooth'})
   }
 
-  function openWrite() {
-    setFormOpen(true); setEditEntry(null); goTo('dash')
+   function openWrite() {
+    setView('dash')
+    setFormOpen(true)
+    setEditEntry(null)
+    setMobileMenu(false)
+    window.scrollTo({top:0, behavior:'smooth'})
   }
 
   // ── BOTTOM PADDING ───────────────────────────────────
