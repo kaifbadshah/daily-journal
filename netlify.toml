@@ -1,0 +1,17 @@
+# netlify.toml
+# This fixes the Next.js 15 / App Router 404 error on Netlify
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[build.environment]
+  NEXT_DISABLE_NETLIFY_PLUGIN = "true"
