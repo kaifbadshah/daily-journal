@@ -14,4 +14,8 @@
   node_bundler = "esbuild"
 
 [build.environment]
+<<<<<<< HEAD
   NEXT_DISABLE_NETLIFY_PLUGIN = "true"
+=======
+  NEXT_DISABLE_NETLIFY_PLUGIN = "true"
+>>>>>>> 6275fee53c8ea7d19d7251e1047bd7299d08d53b
