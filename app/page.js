@@ -11,7 +11,7 @@ import { supabase } from '../lib/supabase'
 const MOODS = [
   { key:'joyful',     label:'Joyful',     symbol:'◈', grad:'135deg,#f59e0b,#ef4444', glow:'rgba(245,158,11,0.35)',  light:'rgba(245,158,11,0.12)'  },
   { key:'calm',       label:'Calm',       symbol:'◌', grad:'135deg,#06b6d4,#3b82f6', glow:'rgba(6,182,212,0.35)',   light:'rgba(6,182,212,0.12)'   },
-  { key:'excited',    label:'Excited',    symbol:'◉', grad:'135deg,#8b5cf6,#ec4899', glow:'rgba(139,92,246,0.35)', light:'rgba(139,92,246,0.12)'  },
+  { key:'excited',    label:'Excited',    symbol:'◉', grad:'135deg,#8b5cf6,#ec4899', glow:'rgba(139,92,246,0.35)',  light:'rgba(139,92,246,0.12)'  },
   { key:'reflective', label:'Reflective', symbol:'◎', grad:'135deg,#10b981,#06b6d4', glow:'rgba(16,185,129,0.35)', light:'rgba(16,185,129,0.12)'  },
   { key:'melancholy', label:'Melancholy', symbol:'◇', grad:'135deg,#6366f1,#8b5cf6', glow:'rgba(99,102,241,0.35)', light:'rgba(99,102,241,0.12)'  },
   { key:'grateful',   label:'Grateful',   symbol:'✦', grad:'135deg,#f43f5e,#f59e0b', glow:'rgba(244,63,94,0.35)',  light:'rgba(244,63,94,0.12)'   },
@@ -44,9 +44,6 @@ const fmtDateShort = ds => new Date(ds).toLocaleDateString('en-US',{
 })
 const fmtTime = ds => new Date(ds).toLocaleTimeString('en-US',{
   hour:'2-digit', minute:'2-digit'
-})
-const fmtDateFull = ds => new Date(ds).toLocaleDateString('en-US',{
-  weekday:'long', year:'numeric', month:'long', day:'numeric'
 })
 
 function getGreeting() {
@@ -81,7 +78,6 @@ const FF = {
 const GRAD_BTN = 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #2563eb 100%)'
 
 // ─── HOOK: USE WINDOW SIZE ───────────────────────────────────
-// Tells us if we're on mobile so we can adjust layouts
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
@@ -107,28 +103,24 @@ function Background() {
         background:'radial-gradient(ellipse 70% 50% at 50% -5%, var(--orb-1) 0%, transparent 60%), radial-gradient(ellipse 55% 45% at 85% 85%, var(--orb-2) 0%, transparent 60%), var(--bg-primary)',
         transition:'background 0.4s ease',
       }}/>
-      {/* Orb 1 */}
       <div style={{
         position:'absolute', top:'-15%', left:'-10%',
         width:'55vmax', height:'55vmax', borderRadius:'50%',
         background:'radial-gradient(circle, var(--orb-1) 0%, transparent 70%)',
         animation:'orbDrift1 18s ease-in-out infinite',
       }}/>
-      {/* Orb 2 */}
       <div style={{
         position:'absolute', bottom:'-20%', right:'-10%',
         width:'50vmax', height:'50vmax', borderRadius:'50%',
         background:'radial-gradient(circle, var(--orb-2) 0%, transparent 70%)',
         animation:'orbDrift2 22s ease-in-out infinite',
       }}/>
-      {/* Orb 3 */}
       <div style={{
         position:'absolute', top:'35%', left:'35%',
         width:'30vmax', height:'30vmax', borderRadius:'50%',
         background:'radial-gradient(circle, var(--orb-3) 0%, transparent 65%)',
         animation:'orbDrift3 14s ease-in-out infinite',
       }}/>
-      {/* Dot grid */}
       <div style={{
         position:'absolute', inset:0,
         backgroundImage:'radial-gradient(var(--border) 1px, transparent 1px)',
@@ -154,7 +146,6 @@ function Book3D({ scale = 1 }) {
       alignItems:'center',
       justifyContent:'center',
     }}>
-      {/* Glow */}
       <div style={{
         position:'absolute',
         width: w * 1.3, height: w * 1.3,
@@ -163,8 +154,6 @@ function Book3D({ scale = 1 }) {
         filter:'blur(28px)',
         animation:'orbDrift1 8s ease-in-out infinite',
       }}/>
-
-      {/* Book */}
       <div style={{ animation:'floatBook 5s ease-in-out infinite' }}>
         <svg
           width={w} height={h}
@@ -193,8 +182,6 @@ function Book3D({ scale = 1 }) {
               <stop offset="100%" stopColor="rgba(255,255,255,0)"/>
             </radialGradient>
           </defs>
-
-          {/* Page stack */}
           {[6,4,2].map((o,i) => (
             <rect key={i}
               x={25+o} y={7+o*0.4}
@@ -203,8 +190,6 @@ function Book3D({ scale = 1 }) {
               fill={`rgba(210,210,220,${0.5-i*0.13})`}
             />
           ))}
-
-          {/* Page edge lines */}
           {Array.from({length:14}).map((_,i) => (
             <line key={i}
               x1="136" y1={13+i*11}
@@ -213,24 +198,16 @@ function Book3D({ scale = 1 }) {
               strokeWidth="0.8"
             />
           ))}
-
-          {/* Spine */}
           <rect x="18" y="5" width="17" height="184" rx="3" fill="url(#spn)"/>
           <rect x="18" y="5" width="5"  height="184" rx="3" fill="rgba(255,255,255,0.1)"/>
-
-          {/* Cover */}
           <rect x="23" y="5" width="115" height="184" rx="5" fill="url(#cvr)"/>
           <rect x="23" y="5" width="115" height="184" rx="5" fill="url(#shn)"/>
           <rect x="23" y="5" width="115" height="184" rx="5" fill="url(#glw)"/>
-
-          {/* Border */}
           <rect x="31" y="13" width="99" height="168" rx="3"
             fill="none"
             stroke="rgba(255,255,255,0.13)"
             strokeWidth="1"
           />
-
-          {/* Title */}
           <text x="81" y="74" textAnchor="middle"
             fontFamily="Georgia,serif"
             fontSize="16"
@@ -240,18 +217,12 @@ function Book3D({ scale = 1 }) {
           >
             Inkwell
           </text>
-
-          {/* Divider */}
           <line x1="51" y1="81" x2="111" y2="81"
             stroke="rgba(255,255,255,0.25)" strokeWidth="0.8"/>
-
-          {/* Pen nib */}
           <path d="M76 98 Q81 90 86 98 Q84 108 81 113 Q78 108 76 98Z"
             fill="rgba(255,255,255,0.28)"/>
           <line x1="81" y1="113" x2="81" y2="122"
             stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
-
-          {/* Ruled lines */}
           {[142,152,162,172].map((y,i) => (
             <line key={i}
               x1="43" y1={y}
@@ -261,8 +232,6 @@ function Book3D({ scale = 1 }) {
             />
           ))}
         </svg>
-
-        {/* Sparkles */}
         {[
           {x:'-22%',y:'-12%',s:6, d:'0s',   t:'3.2s'},
           {x:'108%', y:'5%',  s:4, d:'0.6s', t:'4s'  },
@@ -280,8 +249,6 @@ function Book3D({ scale = 1 }) {
           }}/>
         ))}
       </div>
-
-      {/* Shadow */}
       <div style={{
         position:'absolute', bottom:'5%', left:'50%',
         transform:'translateX(-50%)',
@@ -304,7 +271,6 @@ function Rings({ size }) {
       width:size, height:size,
       pointerEvents:'none',
     }}>
-      {/* Outer */}
       <div style={{
         position:'absolute', inset:0, borderRadius:'50%',
         border:'1px solid rgba(139,92,246,0.15)',
@@ -318,7 +284,6 @@ function Rings({ size }) {
           boxShadow:'0 0 10px rgba(167,139,250,0.9)',
         }}/>
       </div>
-      {/* Middle */}
       <div style={{
         position:'absolute', inset:size*0.12, borderRadius:'50%',
         border:'1px solid rgba(59,130,246,0.12)',
@@ -332,7 +297,6 @@ function Rings({ size }) {
           boxShadow:'0 0 8px rgba(147,197,253,0.8)',
         }}/>
       </div>
-      {/* Inner */}
       <div style={{
         position:'absolute', inset:size*0.25, borderRadius:'50%',
         border:'1px solid rgba(236,72,153,0.08)',
@@ -343,15 +307,8 @@ function Rings({ size }) {
 }
 
 // ─── MOBILE BOTTOM NAV ────────────────────────────────────────
-// Shows on mobile only — tab bar at the bottom of the screen
 
-function MobileBottomNav({ view, onNavigate, onWrite }) {
-  const tabs = [
-    { id:'hero',    icon:'🏠', label:'Home'    },
-    { id:'dash',    icon:'📊', label:'Journal' },
-    { id:'entries', icon:'📚', label:'Entries' },
-  ]
-
+function MobileBottomNav({ view, onNavigate, onWrite, theme, onToggleTheme }) {
   return (
     <div style={{
       position:'fixed', bottom:0, left:0, right:0,
@@ -415,6 +372,7 @@ function MobileBottomNav({ view, onNavigate, onWrite }) {
             fontSize:'22px', lineHeight:1,
             boxShadow:'0 4px 20px var(--accent-glow)',
             transition:'transform 0.2s ease',
+            minHeight:'auto',
           }}
           onTouchStart={e => e.currentTarget.style.transform='scale(0.92)'}
           onTouchEnd={e   => e.currentTarget.style.transform='scale(1)'}
@@ -441,9 +399,9 @@ function MobileBottomNav({ view, onNavigate, onWrite }) {
         }}>Entries</span>
       </button>
 
-      {/* Theme toggle */}
+      {/* Theme toggle — FIXED: was incorrectly calling onWrite */}
       <button
-        onClick={onWrite}
+        onClick={onToggleTheme}
         style={{
           flex:1, display:'flex', flexDirection:'column',
           alignItems:'center', justifyContent:'center',
@@ -452,11 +410,13 @@ function MobileBottomNav({ view, onNavigate, onWrite }) {
           minHeight:'56px',
         }}
       >
-        <span style={{fontSize:'20px', lineHeight:1}}>⚙️</span>
+        <span style={{fontSize:'20px', lineHeight:1}}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </span>
         <span style={{
           fontFamily:FF.body, fontSize:'10px', fontWeight:'500',
           color:'var(--text-muted)',
-        }}>More</span>
+        }}>Theme</span>
       </button>
     </div>
   )
@@ -477,7 +437,6 @@ function DesktopNav({ view, theme, onNavigate, onToggleTheme, onWrite, scrolled 
       borderBottom: scrolled ? '1px solid var(--border)' : 'none',
       transition:'all 0.4s ease',
     }}>
-      {/* Logo */}
       <button
         onClick={() => onNavigate('hero')}
         style={{
@@ -507,7 +466,6 @@ function DesktopNav({ view, theme, onNavigate, onToggleTheme, onWrite, scrolled 
         </span>
       </button>
 
-      {/* Pill nav */}
       <div style={{
         display:'flex', alignItems:'center', gap:'4px',
         background:'var(--bg-card)',
@@ -540,9 +498,7 @@ function DesktopNav({ view, theme, onNavigate, onToggleTheme, onWrite, scrolled 
         ))}
       </div>
 
-      {/* Right controls */}
       <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-        {/* Theme toggle */}
         <button
           onClick={onToggleTheme}
           title={`Switch to ${theme==='dark' ? 'light' : 'dark'} mode`}
@@ -558,8 +514,6 @@ function DesktopNav({ view, theme, onNavigate, onToggleTheme, onWrite, scrolled 
         >
           {theme==='dark' ? '☀️' : '🌙'}
         </button>
-
-        {/* Write button */}
         <button
           onClick={onWrite}
           style={{
@@ -593,8 +547,6 @@ function ToastContainer({ toasts, removeToast, isMobile }) {
   return (
     <div style={{
       position:'fixed',
-      // On mobile — toasts appear at TOP so bottom nav doesn't block them
-      // On desktop — toasts appear at BOTTOM RIGHT
       ...(isMobile
         ? { top:80, left:12, right:12 }
         : { bottom:24, right:24 }
@@ -810,9 +762,7 @@ function StreakCalendar({ entries }) {
             title={`${d.label}: ${d.written ? '✓ Wrote' : 'No entry'}`}
             style={{
               aspectRatio:'1', borderRadius:'5px',
-              background: d.written
-                ? GRAD_BTN
-                : 'var(--bg-input)',
+              background: d.written ? GRAD_BTN : 'var(--bg-input)',
               border:'1px solid var(--border)',
               boxShadow: d.written ? '0 2px 6px var(--accent-glow)' : 'none',
               transition:'transform 0.2s ease',
@@ -846,6 +796,7 @@ function SearchBar({ value, onChange }) {
         style={{
           width:'100%', minHeight:'44px',
           fontFamily:FF.body,
+          fontSize:'16px',
           color:'var(--text-primary)',
           background:'var(--bg-input)',
           border:'1px solid var(--border)',
@@ -976,7 +927,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
         display:'flex', alignItems:'flex-start',
         gap:'12px', padding:'16px',
       }}>
-        {/* Mood orb */}
         <div style={{
           flexShrink:0, width:40, height:40, borderRadius:'12px',
           background:`linear-gradient(${m.grad})`,
@@ -987,7 +937,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
           {m.symbol}
         </div>
 
-        {/* Text */}
         <div style={{flex:1, minWidth:0}}>
           <div style={{
             fontFamily:FF.display,
@@ -999,7 +948,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
           }}>
             {entry.title}
           </div>
-          {/* Meta row */}
           <div style={{
             display:'flex', alignItems:'center',
             gap:'6px', flexWrap:'wrap',
@@ -1029,7 +977,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
             </span>
           </div>
 
-          {/* Tags */}
           {tags.length > 0 && (
             <div style={{
               display:'flex', gap:'4px',
@@ -1058,7 +1005,7 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
           )}
         </div>
 
-        {/* Chevron */}
+        {/* Chevron — removed duplicate flexShrink */}
         <div style={{
           flexShrink:0, width:26, height:26, borderRadius:'50%',
           border:'1px solid var(--border)',
@@ -1066,11 +1013,9 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
           color:'var(--text-muted)', fontSize:'11px',
           transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
           transition:'transform 0.3s ease',
-          flexShrink:0,
         }}>↓</div>
       </div>
 
-      {/* Preview */}
       {!expanded && (
         <div style={{padding:'0 16px 14px', marginTop:'-4px'}}>
           <p style={{
@@ -1086,7 +1031,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
         </div>
       )}
 
-      {/* Expanded */}
       {expanded && (
         <div
           className="aFade"
@@ -1105,8 +1049,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
           }}>
             {entry.content}
           </p>
-
-          {/* Time + reading time */}
           <div style={{
             display:'flex', gap:'8px',
             marginTop:'12px', flexWrap:'wrap',
@@ -1125,8 +1067,6 @@ function EntryCard({ entry, expanded, onToggle, onDelete, onEdit }) {
               {rt}
             </span>
           </div>
-
-          {/* Actions */}
           <div style={{
             display:'flex', gap:'8px',
             justifyContent:'flex-end', marginTop:'14px',
@@ -1178,7 +1118,6 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
   const titleRef = useRef(null)
 
   useEffect(() => {
-    // Small delay so the form animates in first, then focus
     const t = setTimeout(() => titleRef.current?.focus(), 350)
     return () => clearTimeout(t)
   }, [])
@@ -1212,7 +1151,6 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
       boxShadow:'var(--shadow-elevated)',
       marginBottom:'24px',
     }}>
-      {/* Top bar */}
       <div style={{
         display:'flex', alignItems:'center', justifyContent:'space-between',
         padding:'16px 20px',
@@ -1236,7 +1174,6 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
 
       <div style={{padding:'20px', display:'flex', flexDirection:'column', gap:'20px'}}>
 
-        {/* Error */}
         {error && (
           <div style={{
             display:'flex', alignItems:'center', gap:'8px',
@@ -1255,7 +1192,7 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
           </div>
         )}
 
-        {/* Title */}
+        {/* Title input */}
         <input
           ref={titleRef}
           type="text"
@@ -1286,11 +1223,9 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
           }}>
             Mood
           </p>
-          {/* Scrollable mood row on mobile */}
           <div style={{
             display:'flex', gap:'7px',
             overflowX:'auto', paddingBottom:'6px',
-            // Hide scrollbar but keep scrollability
             msOverflowStyle:'none', scrollbarWidth:'none',
           }}>
             {MOODS.map(m => (
@@ -1311,7 +1246,6 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
           }}>
             Tags
           </p>
-          {/* Scrollable tags row on mobile */}
           <div style={{
             display:'flex', gap:'6px',
             overflowX:'auto', paddingBottom:'6px',
@@ -1336,7 +1270,7 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
             style={{
               width:'100%',
               fontFamily:FF.body,
-              fontSize:'clamp(14px, 3.5vw, 15px)',
+              fontSize:'16px',
               lineHeight:'1.8', color:'var(--text-secondary)',
               background:'transparent', border:'none',
               borderBottom:'1px solid var(--border)',
@@ -1366,7 +1300,7 @@ function EntryForm({ initial, onSave, onCancel, saving }) {
           </div>
         </div>
 
-        {/* Action buttons */}
+        {/* Buttons */}
         <div style={{display:'flex', gap:'10px'}}>
           <button
             onClick={onCancel}
@@ -1430,8 +1364,7 @@ export default function Home() {
   const [toasts,      setToasts]      = useState([])
   const [mobileMenu,  setMobileMenu]  = useState(false)
 
-  const isMobile   = useIsMobile()
-  const journalRef = useRef(null)
+  const isMobile = useIsMobile()
 
   // ── THEME ────────────────────────────────────────────
   useEffect(() => {
@@ -1439,7 +1372,9 @@ export default function Home() {
       const saved = localStorage.getItem('inkwell-theme') || 'dark'
       setTheme(saved)
       document.documentElement.setAttribute('data-theme', saved)
-    } catch { document.documentElement.setAttribute('data-theme','dark') }
+    } catch {
+      document.documentElement.setAttribute('data-theme','dark')
+    }
   }, [])
 
   function toggleTheme() {
@@ -1463,6 +1398,7 @@ export default function Home() {
     setToasts(prev => [...prev, {id, message, type}])
     setTimeout(() => removeToast(id), 4000)
   }
+
   function removeToast(id) {
     setToasts(prev => prev.filter(t => t.id!==id))
   }
@@ -1499,7 +1435,8 @@ export default function Home() {
         if (error) throw error
         addToast('Entry saved!', 'success')
       }
-      setFormOpen(false); setEditEntry(null)
+      setFormOpen(false)
+      setEditEntry(null)
       fetchEntries()
     } catch {
       addToast('Could not save. Please try again.', 'error')
@@ -1517,12 +1454,16 @@ export default function Home() {
       setEntries(prev => prev.filter(e => e.id!==id))
       if (expandedId===id) setExpandedId(null)
       addToast('Entry deleted.', 'info')
-    } catch { addToast('Could not delete.', 'error') }
+    } catch {
+      addToast('Could not delete.', 'error')
+    }
   }
 
   // ── EDIT ─────────────────────────────────────────────
   function handleEdit(entry) {
-    setEditEntry(entry); setFormOpen(true); setExpandedId(null)
+    setEditEntry(entry)
+    setFormOpen(true)
+    setExpandedId(null)
   }
 
   // ── FILTERED ENTRIES ─────────────────────────────────
@@ -1565,33 +1506,33 @@ export default function Home() {
   }, [entries])
 
   // ── NAVIGATION ───────────────────────────────────────
+  // FIXED: goTo no longer closes the form when staying on dash
   function goTo(v) {
-    setView(v); setFormOpen(false); setEditEntry(null)
-    setMobileMenu(false)
-    window.scrollTo({top:0, behavior:'smooth'})
-  }
-
-   function openWrite() {
-    setView('dash')
-    setFormOpen(true)
+    setView(v)
+    if (v !== 'dash') {
+      setFormOpen(false)
+    }
     setEditEntry(null)
     setMobileMenu(false)
     window.scrollTo({top:0, behavior:'smooth'})
   }
 
-  // ── BOTTOM PADDING ───────────────────────────────────
-  // On mobile we need extra bottom padding so content
-  // doesn't hide behind the fixed bottom nav bar
+  // FIXED: openWrite no longer calls goTo which was resetting formOpen
+  function openWrite() {
+    setEditEntry(null)
+    setFormOpen(true)
+    setView('dash')
+    setMobileMenu(false)
+    window.scrollTo({top:0, behavior:'smooth'})
+  }
+
+  // ── LAYOUT HELPERS ───────────────────────────────────
   const mobilePadBottom = isMobile ? '90px' : '60px'
   const topPadding      = isMobile ? '76px' : '96px'
   const sidePadding     = 'clamp(14px, 4vw, 40px)'
 
-  // ─────────────────────────────────────────────────────
-  // SHARED NAV (decides which nav to render)
-  // ─────────────────────────────────────────────────────
-
+  // ── NAV BAR ──────────────────────────────────────────
   const NavBar = isMobile ? (
-    /* ── MOBILE TOP BAR ─────────────────────────────── */
     <nav style={{
       position:'fixed', top:0, left:0, right:0,
       display:'flex', alignItems:'center', justifyContent:'space-between',
@@ -1602,7 +1543,6 @@ export default function Home() {
       WebkitBackdropFilter:'blur(24px)',
       borderBottom:'1px solid var(--border)',
     }}>
-      {/* Logo */}
       <button
         onClick={() => goTo('hero')}
         style={{
@@ -1625,7 +1565,6 @@ export default function Home() {
         }}>Inkwell</span>
       </button>
 
-      {/* Right: theme + write */}
       <div style={{display:'flex', alignItems:'center', gap:'8px'}}>
         <button
           onClick={toggleTheme}
@@ -1655,7 +1594,6 @@ export default function Home() {
       </div>
     </nav>
   ) : (
-    /* ── DESKTOP NAV ─────────────────────────────────── */
     <DesktopNav
       view={view}
       theme={theme}
@@ -1685,7 +1623,6 @@ export default function Home() {
         textAlign:'center',
         padding:`${topPadding} ${sidePadding} ${mobilePadBottom}`,
       }}>
-        {/* Book */}
         <div className="a0" style={{
           position:'relative', marginBottom:'28px',
         }}>
@@ -1693,7 +1630,6 @@ export default function Home() {
           <Book3D scale={isMobile ? 0.85 : 1}/>
         </div>
 
-        {/* Eyebrow */}
         <div className="a1" style={{marginBottom:'18px'}}>
           <span style={{
             fontFamily:FF.body,
@@ -1709,7 +1645,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Headline */}
         <h1 className="a2 text-hero" style={{
           fontFamily:FF.display, fontWeight:400,
           color:'var(--text-primary)',
@@ -1731,7 +1666,6 @@ export default function Home() {
           }}>you'd remember.</em>
         </h1>
 
-        {/* Subline */}
         <p className="a3" style={{
           fontFamily:FF.body,
           fontSize: isMobile ? '14px' : '16px',
@@ -1743,7 +1677,6 @@ export default function Home() {
           and revisit the moments that shaped you.
         </p>
 
-        {/* CTAs */}
         <div className="a4" style={{
           display:'flex',
           flexDirection: isMobile ? 'column' : 'row',
@@ -1753,7 +1686,7 @@ export default function Home() {
           alignItems:'center',
         }}>
           <button
-            onClick={() => goTo('dash')}
+            onClick={() => openWrite()}
             style={{
               fontFamily:FF.body, fontSize:'15px', fontWeight:'600',
               color:'#fff', background: GRAD_BTN,
@@ -1784,7 +1717,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Stats */}
         <div className="a5" style={{
           display:'flex', gap: isMobile ? '28px' : '48px',
           justifyContent:'center', flexWrap:'wrap',
@@ -1793,9 +1725,9 @@ export default function Home() {
           width:'100%', maxWidth:'400px',
         }}>
           {[
-            {val:stats.total,  label:'Entries'     },
-            {val:stats.streak, label:'Day Streak'   },
-            {val:stats.words,  label:'Words'        },
+            {val:stats.total,  label:'Entries'   },
+            {val:stats.streak, label:'Day Streak' },
+            {val:stats.words,  label:'Words'      },
           ].map(s => (
             <div key={s.label} style={{textAlign:'center'}}>
               <div style={{
@@ -1819,15 +1751,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mobile bottom nav */}
       {isMobile && (
         <MobileBottomNav
           view={view}
           onNavigate={goTo}
           onWrite={openWrite}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
       )}
-
       <ToastContainer toasts={toasts} removeToast={removeToast} isMobile={isMobile}/>
     </div>
   )
@@ -1849,7 +1781,6 @@ export default function Home() {
         padding:`${topPadding} ${sidePadding} ${mobilePadBottom}`,
       }}>
 
-        {/* Header */}
         <div className="a0" style={{marginBottom:'24px'}}>
           <p style={{
             fontFamily:FF.body, fontSize:'11px', fontWeight:'700',
@@ -1878,7 +1809,7 @@ export default function Home() {
           )}
         </div>
 
-        {/* Form or prompt */}
+        {/* FIXED: prompt bar now correctly calls openWrite */}
         {!formOpen ? (
           <div className="a1" style={{marginBottom:'28px'}}>
             <button
@@ -1891,17 +1822,17 @@ export default function Home() {
                 border:'1px solid var(--border)',
                 borderRadius:'16px',
                 padding:'16px 18px',
-                cursor:'text',
+                cursor:'pointer',
                 display:'flex', alignItems:'center', gap:'10px',
                 transition:'all 0.3s ease',
                 backdropFilter:'blur(20px)',
                 minHeight:'56px',
               }}
-              onFocus={e => {
+              onMouseEnter={e => {
                 e.currentTarget.style.borderColor='var(--border-focus)'
                 e.currentTarget.style.boxShadow='0 0 0 3px var(--accent-subtle)'
               }}
-              onBlur={e => {
+              onMouseLeave={e => {
                 e.currentTarget.style.borderColor='var(--border)'
                 e.currentTarget.style.boxShadow='none'
               }}
@@ -1919,21 +1850,17 @@ export default function Home() {
           />
         )}
 
-        {/* Stats grid — 2 cols on mobile, 4 on desktop */}
         <div className="a2" style={{
           display:'grid',
-          gridTemplateColumns: isMobile
-            ? 'repeat(2, 1fr)'
-            : 'repeat(4, 1fr)',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
           gap:'10px', marginBottom:'16px',
         }}>
-          <StatCard icon="📝" label="Entries"    value={stats.total}  sub={`${stats.avgWords} avg words`} delay={0}   />
-          <StatCard icon="🔥" label="Streak"     value={stats.streak} sub={stats.streak>0?"Keep going!":"Start today"} delay={0.06}/>
-          <StatCard icon="✍️" label="Words"      value={stats.words.toLocaleString()} sub="Total written"  delay={0.12}/>
-          <StatCard icon="🎭" label="Top Mood"   value={stats.topMood} sub={`${stats.moods} moods`}        delay={0.18}/>
+          <StatCard icon="📝" label="Entries"  value={stats.total}                    sub={`${stats.avgWords} avg words`}              delay={0}   />
+          <StatCard icon="🔥" label="Streak"   value={stats.streak}                   sub={stats.streak>0 ? 'Keep going!' : 'Start today'} delay={0.06}/>
+          <StatCard icon="✍️" label="Words"    value={stats.words.toLocaleString()}   sub="Total written"                              delay={0.12}/>
+          <StatCard icon="🎭" label="Top Mood" value={stats.topMood}                  sub={`${stats.moods} moods`}                     delay={0.18}/>
         </div>
 
-        {/* Charts — stack on mobile */}
         <div className="a3" style={{
           display:'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
@@ -1943,7 +1870,6 @@ export default function Home() {
           <StreakCalendar entries={entries}/>
         </div>
 
-        {/* Recent entries */}
         <div className="a4">
           <div style={{
             display:'flex', alignItems:'center',
@@ -2026,7 +1952,13 @@ export default function Home() {
       </div>
 
       {isMobile && (
-        <MobileBottomNav view={view} onNavigate={goTo} onWrite={openWrite}/>
+        <MobileBottomNav
+          view={view}
+          onNavigate={goTo}
+          onWrite={openWrite}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
       )}
       <ToastContainer toasts={toasts} removeToast={removeToast} isMobile={isMobile}/>
     </div>
@@ -2049,7 +1981,6 @@ export default function Home() {
         padding:`${topPadding} ${sidePadding} ${mobilePadBottom}`,
       }}>
 
-        {/* Header */}
         <div className="a0" style={{marginBottom:'24px'}}>
           <p style={{
             fontFamily:FF.body, fontSize:'11px', fontWeight:'700',
@@ -2086,9 +2017,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Search + controls */}
         <div className="a1" style={{marginBottom:'12px'}}>
-          {/* Row 1: Search + Sort */}
           <div style={{
             display:'flex', gap:'8px',
             flexWrap: isMobile ? 'wrap' : 'nowrap',
@@ -2096,7 +2025,6 @@ export default function Home() {
           }}>
             <SearchBar value={search} onChange={setSearch}/>
 
-            {/* Sort dropdown */}
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
@@ -2117,7 +2045,6 @@ export default function Home() {
               ))}
             </select>
 
-            {/* Filter toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
               style={{
@@ -2137,7 +2064,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Expanded filters */}
           {showFilters && (
             <div className="aScale" style={{
               background:'var(--bg-card)',
@@ -2154,7 +2080,6 @@ export default function Home() {
                 }}>
                   Filter by Mood
                 </p>
-                {/* Scrollable on mobile */}
                 <div style={{
                   display:'flex', gap:'6px',
                   overflowX:'auto', paddingBottom:'4px',
@@ -2196,7 +2121,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Results summary */}
           <div style={{
             fontFamily:FF.body, fontSize:'12px',
             color:'var(--text-muted)',
@@ -2208,7 +2132,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Entries list */}
         <div className="a2">
           {loading ? (
             <div style={{
@@ -2265,7 +2188,13 @@ export default function Home() {
       </div>
 
       {isMobile && (
-        <MobileBottomNav view={view} onNavigate={goTo} onWrite={openWrite}/>
+        <MobileBottomNav
+          view={view}
+          onNavigate={goTo}
+          onWrite={openWrite}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
       )}
       <ToastContainer toasts={toasts} removeToast={removeToast} isMobile={isMobile}/>
     </div>
